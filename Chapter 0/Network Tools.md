@@ -69,3 +69,31 @@ Will do a deep dive into this too!
 - Iface (interface): The network interface used (Wi-Fi or Ethernet) such as `eth0`
 
 If your computer isn't connecting to a network, these commands help check if your network interfaces are up and have the correct IP addresses, you can see quickly if a network cable is disconnected or if your Wi-Fi isn't working properly
+
+## grep and findstr
+Many network-related commands product far more output than you want to read
+
+*grep* (Unix) and *findstr* (Windows) commands let you search for a specific string within a pile of output
+
+I do encourage Windows sysadmins to install one of the many versions of *grep* on your systems, as it's far more flexible than *findstr*
+
+`|` is the pipe operator, it takes output from the left command and passes it as input to the right command
+
+### grep Deep Dive
+*grep*: A command-line utility available on Unix/Linux systems, it searches through files or command output for lines that match a specific **pattern** (using simple text matching or regular expressions)
+
+For example, say you only want to see lines containing the word "inet", which shows IP Addresses, you can do
+
+```sh
+ifconfig | grep inet
+```
+
+By default, grep is case sensitive, you can use the `-i` flag to ignore case
+
+The exact same can be done with *findstr*, though in findstr, the `/I` option makes the search case-insensitive
+
+```sh
+ipconfig | findstr /I IPv4
+```
+
+*grep* allows for complex regular expressions to match patterns, *findstr* supports basic regex, though it's less powerful an less intuitive than grep
