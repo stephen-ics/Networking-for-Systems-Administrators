@@ -79,7 +79,7 @@ I do encourage Windows sysadmins to install one of the many versions of *grep* o
 
 `|` is the pipe operator, it takes output from the left command and passes it as input to the right command
 
-### grep Deep Dive
+### grep
 *grep*: A command-line utility available on Unix/Linux systems, it searches through files or command output for lines that match a specific **pattern** (using simple text matching or regular expressions)
 
 For example, say you only want to see lines containing the word "inet", which shows IP Addresses, you can do
@@ -98,7 +98,7 @@ ipconfig | findstr /I IPv4
 
 *grep* allows for complex regular expressions to match patterns, *findstr* supports basic regex, though it's less powerful an less intuitive than grep
 
-### netstat
+## netstat
 The *netstat* command displays a system's established network connections, what connections the system can receive, and network statistics
 
 Some operating systems, like Solaris, use *netstat* to show the routing table, many operating systems offer most of their visibility into their network using *netstat*
@@ -133,7 +133,7 @@ It displays the protocol used by the connection, for example `tcp` means a TCP c
 - `Foreign Address`: The address of the remote machine that your computer is connected to
 `ESTABLISHED`: This means there is a fully active connection where data can flow
 
-### lsof
+## lsof
 The Unix command *lsof* stands for *list Open Files*, it shows you a list of all files that are open by active processes on your system
 
 Since in Unix-like systems "everything is a file" (files, directories, network sockets, pipes, devices, etc), lsof is a versatile for diagnosing system behaviour and debugging
@@ -179,3 +179,34 @@ chrome     2345   alice  123u    IPv4     0t0        0            34567 TCP 192.
 `-i :80`: Shows processes using port 80 (HTTP)
 
 A "process" is a running program, when you execute a program, the operating system creates a process, each process is an individual instance of that program running in memory
+
+## tcpdump and Wireshark
+The *tcpdump* command displays traffic to and from a server, even when the server rejects that traffic, it is the fastest way to view network activity
+
+For more complicated analysis, an option is Wireshark
+
+Many operating systems include their own traffic sniffing program such as *snoop* on Solaris and Microsoft's Network Monitor and Message Analyzer
+
+There's nothing wrong with these tools, but expertise in them doesn't carry over into other operating systems
+
+Most of them use syntax copied from *tcpdump*, however an understanding of *tcpdump* makes using platform-specific tools much easier
+
+## netcat
+The *netcat* program lets you listen to the network on a specific port, and lets you send arbitrary network traffic
+
+It's a great way to verify that the network will let you send and receive traffic without configuring a specific daemon or service for that purpose, not all operating systems include *netcat* by default
+
+To use netcat as a listener:
+```sh
+nc -l -p 1234
+```
+`-l` tells the netcat to listen for an incoming connection
+`-p 1234` specifies the port
+
+The terminal waits for someone to connect to port 1234, any data sent by the connecting client will be displayed in this terminal
+
+Netcat can be used to transfer files, for example
+```sh
+nc -l -p 1234 > received_file.txt
+```
+This command listens on port 1234 and redirects incoming data to received_file.txt
