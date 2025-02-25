@@ -132,3 +132,50 @@ It displays the protocol used by the connection, for example `tcp` means a TCP c
 - `Local Address`: The address on your machine
 - `Foreign Address`: The address of the remote machine that your computer is connected to
 `ESTABLISHED`: This means there is a fully active connection where data can flow
+
+### lsof
+The Unix command *lsof* stands for *list Open Files*, it shows you a list of all files that are open by active processes on your system
+
+Since in Unix-like systems "everything is a file" (files, directories, network sockets, pipes, devices, etc), lsof is a versatile for diagnosing system behaviour and debugging
+
+Each open file is associated with a process, lsof shows which process (PID) has the file open, what user owns that process, and how the file is being used (read, write, etc)
+
+*lsof* interfaces with the kernel to retrieve a snapshot of open file descriptors, every process maintains a table of file descriptors, which lsof reads to present the information
+
+Command:
+```sh
+lsof
+```
+
+Sample Output:
+```sh
+COMMAND     PID    USER   FD      TYPE     DEVICE    SIZE/OFF     NODE NAME
+bash       1234   alice  cwd     DIR      8,1       4096         56789 /home/alice
+bash       1234   alice  txt     REG      8,1       1037528      123456 /bin/bash
+chrome     2345   alice  mem     REG      8,1       2345678      234567 /usr/lib/chrome/libfoo.so
+chrome     2345   alice  123u    IPv4     0t0        0            34567 TCP 192.168.1.100:56789->93.184.216.34:http (ESTABLISHED)
+```
+
+- `COMMAND`: The name of the command (or process) that opened the file
+- `PID`: The process ID which uniquely identifies the process, it's a unique number assigned by the operating system to each process when it starts
+- `USER`: The owner under which the process is running
+- `FD`: The descriptor number or type of file, sometimes appended with a letter
+        - *cwd*: Current working directory
+        - *txt*: Program text
+        - *mem*: Memory-mapped file
+- `TYPE`: The type of file
+        - *DIR*: Directory
+        - *REG*: Regular file
+        - *IPv4/IPv6*: Network sockets
+        - *CHR*: Character device
+
+- `DEVICE`: The device number or filesystem identifier
+- `SIZE/OFF`: For regular files, this shows the size in bytes, for other types it might show the current file offset
+- `NODE`: The inode number of the file system, useful for low-level troubleshooting
+- `NAME`: The full path to the file, for network sockets the network endpoint
+
+`-c [name]`: Lists only files opened by processes whose command begins with set name
+`-p [pid]`: Lists files opened by the process ID
+`-i :80`: Shows processes using port 80 (HTTP)
+
+A "process" is a running program, when you execute a program, the operating system creates a process, each process is an individual instance of that program running in memory
