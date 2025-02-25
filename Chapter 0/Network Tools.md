@@ -97,3 +97,38 @@ ipconfig | findstr /I IPv4
 ```
 
 *grep* allows for complex regular expressions to match patterns, *findstr* supports basic regex, though it's less powerful an less intuitive than grep
+
+### netstat
+The *netstat* command displays a system's established network connections, what connections the system can receive, and network statistics
+
+Some operating systems, like Solaris, use *netstat* to show the routing table, many operating systems offer most of their visibility into their network using *netstat*
+
+To clarify, *ifconfig* focuses on individual network interfaces while *netstat* looks at a broader view of network activity such as TCP and UDP sockets, and details like the local and foreign addresses, port numbers, and the state of each connection
+
+You should use *ifconfig* to verify that your interface is up, has an IP address, and the correct configuration, and you should use *netstat* when monitoring network traffic, identifying which connections are active, which ports are open, and that your system is sending data through the correct gateway
+
+*route* is specifically designed to display the routing table while netstat is a more comprehensive tool though `netstat -rn` displays the same routing table information as `route`
+
+You can use the `-rn` flag to display numeric addresses and avoid DNS lookups
+
+Command:
+```sh
+netstat
+```
+
+Sample Output:
+```sh
+Active Internet connections
+Proto Recv-Q Send-Q  Local Address          Foreign Address        (state)
+tcp        0      0  192.168.1.100:443      93.184.216.34:52345    ESTABLISHED
+tcp        0      0  192.168.1.100:22       192.168.1.50:57632     ESTABLISHED
+tcp6       0      0  ::1:631                ::1:51234             LISTEN
+udp        0      0  192.168.1.100:68      *:*                    
+```
+It displays the protocol used by the connection, for example `tcp` means a TCP connection over IPv4
+
+- `Recv-Q`: The amount of data in bytes that has been received and queued waiting to be read
+- `Send-Q`: The amount of data (in bytes) waiting in the send queue to be transmitted
+- `Local Address`: The address on your machine
+- `Foreign Address`: The address of the remote machine that your computer is connected to
+`ESTABLISHED`: This means there is a fully active connection where data can flow
